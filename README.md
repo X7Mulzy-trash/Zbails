@@ -58,7 +58,7 @@ You can also add it to your package manifest as `baileys` or `@whiskeysockets/ba
 ```json
 {
   "dependencies": {
-    "@qwerty-xcv/baileys": "latest"
+    "@qwerty-xcv/baileys": "github:XazepysK/wbails"
   }
 }
 ```
