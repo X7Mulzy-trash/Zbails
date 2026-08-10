@@ -308,6 +308,12 @@ npm test
       </a>
     </td>
     <td align="center">
+      <a href="https://github.com/vansnowi">
+        <img src="https://github.com/vansnowi.png" width="80px;" style="border-radius:50%;" alt="Contributor"/>
+        <br /><sub><b>TsM Snøwi</b></sub>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/Xcoursed">
         <img src="https://github.com/Xcoursed.png" width="80px;" style="border-radius:50%;" alt="Contributor"/>
         <br /><sub><b>Xcoursed</b></sub>
