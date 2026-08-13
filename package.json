@@ -1,7 +1,7 @@
 {
-  "name": "@XazepysK/wbails",
+  "name": "wbails",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
