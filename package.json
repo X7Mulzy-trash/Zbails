@@ -1,7 +1,10 @@
 {
-  "name": "wbails",
+  "name": "@XazepysK/wbails",
   "type": "module",
   "version": "0.0.2",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "description": "A WebSockets library for interacting with WhatsApp Web — fork of Baileys with extra socket layers (communities, interop, privacy, GraphQL) and special message helpers.",
   "keywords": [
     "baileys",
