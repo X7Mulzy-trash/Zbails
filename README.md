@@ -1,19 +1,5 @@
 <div align="center">
 
-# @qwerty-xcv/baileys
-
-A WebSocket-based library for interacting with WhatsApp Web — a fork of
-[Baileys](https://github.com/WhiskeySockets/Baileys) with additional socket layers
-(Communities, Interop, Privacy, GraphQL) and helpers for special message types
-such as payments, products, albums, events, poll results, and order messages.
-
-[![npm version](https://img.shields.io/npm/v/@qwerty-xcv/baileys.svg)](https://www.npmjs.com/package/@qwerty-xcv/baileys)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Downloads](https://img.shields.io/npm/dm/@qwerty-xcv/baileys.svg)](https://www.npmjs.com/package/@qwerty-xcv/baileys)
-[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
-
-[Donation](https://www.zeppeli.my.id) · [API Reference](docs/API.md)
-
 </div>
 
 ---
