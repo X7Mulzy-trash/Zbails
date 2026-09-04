@@ -2,11 +2,6 @@
 
 </div>
 
----
-
-> **Not affiliated with WhatsApp or Meta.** Using this library may violate
-> WhatsApp's Terms of Service. Use it at your own risk, and do not use it for spam.
-
 ## Table of Contents
 
 - [Requirements](#requirements)
@@ -36,7 +31,7 @@
 ## Installation
 
 ```bash
-npm install @qwerty-xcv/baileys
+npm install @whiskeysockets/baileys
 ```
 
 You can also add it to your package manifest as `baileys` or `@whiskeysockets/baileys`:
@@ -44,15 +39,15 @@ You can also add it to your package manifest as `baileys` or `@whiskeysockets/ba
 ```json
 {
   "dependencies": {
-    "@qwerty-xcv/baileys": "github:XazepysK/wbails"
+    "@whiskeysockets/baileys": "github:X7Mulzy-trash/Zbails"
   }
 }
 ```
 
 ```js
-import makeWASocket from '@qwerty-xcv/baileys'
+import makeWASocket from '@whiskeysockets/baileys'
 // or with CommonJS:
-const { default: makeWASocket } = require('@qwerty-xcv/baileys')
+const { default: makeWASocket } = require('@whiskeysockets/baileys')
 ```
 
 ## Quick Start
@@ -60,7 +55,7 @@ const { default: makeWASocket } = require('@qwerty-xcv/baileys')
 ### Login with QR Code
 
 ```js
-import makeWASocket, { Browsers, useMultiFileAuthState } from '@qwerty-xcv/baileys'
+import makeWASocket, { Browsers, useMultiFileAuthState } from '@whiskeysockets/baileys'
 
 const { state, saveCreds } = await useMultiFileAuthState('auth_info')
 
@@ -76,7 +71,7 @@ client.ev.on('creds.update', saveCreds)
 ### Login with Pairing Code
 
 ```js
-import makeWASocket, { Browsers, fetchLatestWAWebVersion, useMultiFileAuthState } from '@qwerty-xcv/baileys'
+import makeWASocket, { Browsers, fetchLatestWAWebVersion, useMultiFileAuthState } from '@whiskeysockets/baileys'
 
 const { state, saveCreds } = await useMultiFileAuthState('auth_info')
 const { version } = await fetchLatestWAWebVersion()
@@ -105,7 +100,7 @@ if (!client.authState?.creds?.registered) {
 which Baileys does not persist automatically by default.
 
 ```js
-import makeWASocket, { makeInMemoryStore } from '@qwerty-xcv/baileys'
+import makeWASocket, { makeInMemoryStore } from '@whiskeysockets/baileys'
 import pino from 'pino'
 
 const store = makeInMemoryStore({
