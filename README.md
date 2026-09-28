@@ -1,40 +1,58 @@
 <div align="center">
 
+# ⚡ Baileys — WhatsApp Web API for Node.js
+
+**Lightweight · WebSocket-based · No browser required**
+
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-active-success)
+
 </div>
 
-## Table of Contents
+---
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
+## 📚 Table of Contents
+
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
   - [Login with QR Code](#login-with-qr-code)
   - [Login with Pairing Code](#login-with-pairing-code)
-- [Store](#store)
-- [Sending Messages](#sending-messages)
+- [Store](#-store)
+- [Sending Messages](#-sending-messages)
   - [Generic Send / Relay](#generic-send--relay)
   - [Simple Senders](#simple-senders)
   - [Special Message Types](#special-message-types)
-- [Events](#events)
-- [Examples](#examples)
-- [Known Limitations](#known-limitations)
-- [Contributing](#contributing)
-- [License](#license)
+- [Moderation](#-moderation)
+- [Events](#-events)
+- [Examples](#-examples)
+- [Known Limitations](#-known-limitations)
+- [Community](#-community-channels)
+- [License](#-license)
 
-## Requirements
+---
+
+## 📦 Requirements
 
 - Node.js **>= 20**
-- Optional peer dependencies depending on the features you use:
-  - `sharp` or `jimp` for image processing
-  - `link-preview-js` for link previews
-  - `audio-decode` for audio waveform handling
+- Optional peer dependencies, depending on which features you use:
 
-## Installation
+| Package | Needed for |
+|---|---|
+| `sharp` or `jimp` | Image processing |
+| `link-preview-js` | Link previews |
+| `audio-decode` | Audio waveform handling |
+
+---
+
+## 🚀 Installation
 
 ```bash
 npm install @whiskeysockets/baileys
 ```
 
-You can also add it to your package manifest as `baileys` or `@whiskeysockets/baileys`:
+Or add it directly to your `package.json`:
 
 ```json
 {
@@ -50,7 +68,9 @@ import makeWASocket from '@whiskeysockets/baileys'
 const { default: makeWASocket } = require('@whiskeysockets/baileys')
 ```
 
-## Quick Start
+---
+
+## ⚡ Quick Start
 
 ### Login with QR Code
 
@@ -86,18 +106,19 @@ const client = makeWASocket({
 client.ev.on('creds.update', saveCreds)
 
 if (!client.authState?.creds?.registered) {
-  const phoneNumber = '628XXXXXXXXXX' // international format, without '+'
+  const phoneNumber = '628XXXXXXXXXX' // format internasional, tanpa '+'
   const code = await client.requestPairingCode(phoneNumber)
-  // custom pairing code (8 characters):
+  // pairing code custom (8 karakter):
   // const code = await client.requestPairingCode(phoneNumber, 'YYYYYYYY')
   console.log('Pairing code:', code)
 }
 ```
 
-## Store
+---
 
-`makeInMemoryStore` creates a local cache for chats, contacts, and messages,
-which Baileys does not persist automatically by default.
+## 🗄️ Store
+
+`makeInMemoryStore` bikin cache lokal buat chat, kontak, dan pesan — Baileys sendiri **tidak** menyimpan data ini secara otomatis.
 
 ```js
 import makeWASocket, { makeInMemoryStore } from '@whiskeysockets/baileys'
@@ -107,25 +128,24 @@ const store = makeInMemoryStore({
   logger: pino().child({ level: 'silent', stream: 'store' })
 })
 
-const client = makeWASocket({ /* ...other options */ })
+const client = makeWASocket({ /* ...opsi lain */ })
 store.bind(client.ev)
 
 client.ev.on('contacts.upsert', () => {
-  console.log('New contact:', Object.values(store.contacts))
+  console.log('Kontak baru:', Object.values(store.contacts))
 })
 ```
 
-Need a persistent store such as Redis? Use `makeCacheManagerStore` — see the [API Reference](docs/API.md#store-libstore).
+> Butuh store persisten (Redis, dll)? Pakai `makeCacheManagerStore` — lihat [API Reference](docs/API.md#store-libstore).
 
-### Saving the Store to a File
+### Menyimpan Store ke File
 
-`makeInMemoryStore` can read from and write to a local JSON file, so it can
-survive restarts without requiring an external database.
+`makeInMemoryStore` bisa baca/tulis ke file JSON lokal, jadi data bisa bertahan setelah restart tanpa perlu database eksternal.
 
 ```js
 const store = makeInMemoryStore({ /* ... */ })
 
-// load once on startup, then auto-save every 10 seconds
+// load sekali saat startup, lalu auto-save tiap 10 detik
 const stopAutoSave = store.writeToFileInterval('./store.json')
 
 process.on('SIGINT', () => {
@@ -134,24 +154,25 @@ process.on('SIGINT', () => {
 })
 ```
 
-You can also manage it manually with `store.readFromFile(path)` and `store.writeToFile(path)`.
-See the [API Reference](docs/API.md#file-persistence-makeinmemorystore) for more details.
+Bisa juga dikelola manual lewat `store.readFromFile(path)` dan `store.writeToFile(path)` — detail lengkap di [API Reference](docs/API.md#file-persistence-makeinmemorystore).
 
-## Sending Messages
+---
+
+## 💬 Sending Messages
 
 ### Generic Send / Relay
 
 ```js
-// relayMessage — sends a raw message object, bypassing the sendMessage pipeline
+// relayMessage — kirim raw message object, skip pipeline sendMessage
 await client.relayMessage(jid, { conversation: 'Hello from Baileys' }, {})
 
-// sendMessage — the standard way to send a message
+// sendMessage — cara standar mengirim pesan
 await client.sendMessage(jid, { text: 'Hello from Baileys' })
 ```
 
 ### Simple Senders
 
-All `sendX` helpers below are shortcuts built on top of `sendMessage`.
+Semua helper `sendX` di bawah ini adalah shortcut yang dibangun di atas `sendMessage`.
 
 ```js
 await client.sendText(jid, 'Hi!', { contextInfo: { mentionedJid: [jid] } })
@@ -163,13 +184,100 @@ await client.sendPoll(jid, 'Pick one', ['Option 1', 'Option 2', 'Option 3'], /* 
 await client.sendQuiz(jid, 'Correct answer?', ['1', '2', '3'], /* correctIndex */ '2')
 ```
 
-### Special Message Types
-
-These are handled internally by the `Socket/luxu.js` helper and are invoked automatically
-by `sendMessage` or `relayMessage` whenever the payload contains one of the fields below.
+<details>
+<summary><b>🧩 <code>richMenu</code> — pesan interaktif custom (header/body/footer)</summary>
 
 ```js
-// Product message (catalog)
+await client.richMenu(jid, {
+  header: {
+    title: 'Judul Menu',
+    image: { url: 'https://example.com/banner.png' }, // opsional
+    disclaimer: true,                                  // opsional
+    disclaimerText: 'Pesan ini dari bot otomatis'       // opsional
+  },
+  body: {
+    title: 'Pilih menu',
+    buttons: ['Menu 1', 'Menu 2', 'Menu 3'], // tombol biasa
+    toast: 'Fitur belum tersedia'             // pesan saat tombol dipencet
+  },
+  footer: {
+    text: 'Kunjungi channel',
+    url: 'https://t.me/namachannel'
+  }
+})
+```
+
+`buttons` di sini bersifat statis (state `PENDING`) — hanya menampilkan `toast`, tidak memicu command apa pun. Gunakan `cards` + `carousel: true` untuk tampilan list/carousel.
+
+</details>
+
+<details>
+<summary><b>🎬 <code>sendReels</code> — kirim carousel reels custom (video + metadata + like/verified badge)</summary>
+
+```js
+await client.sendReels(jid, [
+        {
+            title: 'Judul Reel 1',
+            creator: 'X7Mulzy🕊️',
+            videoUrl: 'https://example.com/video1.mp4',
+            thumbnailUrl: 'https://example.com/thumb1.jpg',
+            likesCount: 1200,
+            isVerified: true
+        },
+        {
+            title: 'Judul Reel 2',
+            creator: 'akun2',
+            videoUrl: 'https://example.com/video2.mp4'
+        }
+    ],
+    quotedMsg,     // opsional 
+    {
+        text: 'Nih reel-reel keren',   // opsional, teks intro di atas carousel
+        noDonation: true // opsional, default true (link donasi disembunyiin)
+    }
+);
+```
+
+</details>
+
+
+<details>
+<summary><b>📱 <code>sendSocialProfile</code> — kartu profil sosial media (multi-platform)</summary>
+
+```js
+await client.sendSocialProfile(jid, {
+  username: 'X7Mulzy🕊️',
+  platform: 'tiktok',                        // bisa platform apa aja
+  imageUrl: 'https://example.com/foto.jpg',  // opsional
+  fullName: 'TRiPLESIX SOCIETY',              // opsional
+  isVerified: false                           // opsional
+})
+```
+
+</details>
+
+<details>
+<summary><b>📸 <code>sendInstagramProfile</code> — kartu profil khusus Instagram</summary>
+
+```js
+await client.sendInstagramProfile(jid, {
+  username: 'X7Mulzy🕊️',
+  imageUrl: 'https://example.com/foto.jpg', // opsional
+  fullName: 'trushedv7',                    // opsional
+  isVerified: true                          // opsional
+})
+```
+
+</details>
+
+### Special Message Types
+
+Ditangani secara internal oleh helper `Socket/luxu.js`, dan otomatis dipicu oleh `sendMessage` atau `relayMessage` setiap kali payload berisi salah satu field berikut.
+
+<details>
+<summary>Product message (catalog)</summary>
+
+```js
 await client.relayMessage(jid, {
   productMessage: {
     title: 'Product Name',
@@ -180,12 +288,18 @@ await client.relayMessage(jid, {
     url: 'https://store.example/product',
     body: 'Body text',
     footer: 'Footer text',
-    priceAmount1000: 72502, // price x 1000
+    priceAmount1000: 72502, // harga x 1000
     currencyCode: 'IDR'
   }
 }, {})
+```
 
-// Order message
+</details>
+
+<details>
+<summary>Order message</summary>
+
+```js
 await client.sendMessage(jid, {
   thumbnail: fs.readFileSync('./thumb.jpg'),
   message: 'Order details',
@@ -193,8 +307,14 @@ await client.sendMessage(jid, {
   totalAmount1000: 72502,
   totalCurrencyCode: 'IDR'
 }, { quoted: m })
+```
 
-// Poll result snapshot (usually from a newsletter)
+</details>
+
+<details>
+<summary>Poll result snapshot (biasanya dari newsletter)</summary>
+
+```js
 await client.sendMessage(jid, {
   pollResultMessage: {
     name: 'Poll Title',
@@ -202,8 +322,14 @@ await client.sendMessage(jid, {
     newsletter: { newsletterName: 'Newsletter Name', newsletterJid: '1234567890@newsletter' }
   }
 })
+```
 
-// Interactive message (button)
+</details>
+
+<details>
+<summary>Interactive message (button)</summary>
+
+```js
 await client.sendMessage(jid, {
   image: { url: './banner.jpg' },
   text: 'Message body',
@@ -214,23 +340,60 @@ await client.sendMessage(jid, {
     buttonParamsJson: JSON.stringify({ display_text: 'Visit', url: 'https://example.com' })
   }]
 })
+```
 
-// Group member label
+</details>
+
+<details>
+<summary>Group member label</summary>
+
+```js
 await client.sendMessage(jid, {
   groupLabel: { labelText: 'Admin' }
 })
+```
 
-// Broadcast to specific group members
+</details>
+
+<details>
+<summary>Broadcast ke member grup tertentu</summary>
+
+```js
 await client.sendMessageMembers(jid, { extendedTextMessage: { text: 'Announcement' } }, {})
 ```
 
-> Fields such as `sender` and `participant: true` in the second argument of
-> `sendMessage` or `relayMessage` are used to provide group-participant context.
-> See the [API Reference](docs/API.md) for details on each socket layer.
+</details>
 
-## Events
+> 💡 Field seperti `sender` dan `participant: true` pada argumen kedua `sendMessage`/`relayMessage` dipakai untuk memberi konteks partisipan grup. Detail tiap layer socket ada di [API Reference](docs/API.md).
 
-All interactions are exposed through events on `client.ev`:
+---
+
+## 🛡️ Moderation
+
+```js
+// Laporkan pesan spam
+await client.reportSpam(senderJid, [
+  { id: 'MSG_ID_1', t: '1700000000' },
+  { id: 'MSG_ID_2', t: '1700000010' }
+])
+
+// Laporkan user
+await client.reportUser(senderJid, 'harassment')
+
+// Laporkan lalu langsung block
+await client.reportAndBlockUser(senderJid, 'scam')
+
+// Laporkan satu pesan spesifik (di grup, sertakan participant jid pengirim)
+await client.reportMessage(groupJid, 'MSG_ID_XXX', 'scam', senderParticipantJid)
+```
+
+`reason` yang tersedia: `'spam'`, `'harassment'`, `'impersonation'`, `'scam'`, `'other'` (default `'spam'`).
+
+---
+
+## 📡 Events
+
+Semua interaksi diekspos lewat event di `client.ev`:
 
 ```js
 client.ev.on('connection.update', ({ connection, lastDisconnect }) => {
@@ -246,63 +409,31 @@ client.ev.on('messages.upsert', ({ messages, type }) => {
 client.ev.on('creds.update', saveCreds)
 ```
 
-See the full list of available events in `lib/Types/Events.js`.
+Daftar lengkap event tersedia di `lib/Types/Events.js`.
 
-## Examples
+---
 
-Ready-to-run examples are available in [examples/](examples):
+## 🧪 Examples
 
-- [examples/qr-login.js](examples/qr-login.js) — QR login with automatic reconnection
-- [examples/pairing-code.js](examples/pairing-code.js) — pairing code login
-- [examples/store-usage.js](examples/store-usage.js) — using the in-memory store
+Contoh siap-jalan tersedia di [examples/](examples):
 
-## Known Limitations
+| File | Deskripsi |
+|---|---|
+| [`examples/qr-login.js`](examples/qr-login.js) | Login QR dengan auto-reconnect |
+| [`examples/pairing-code.js`](examples/pairing-code.js) | Login pairing code |
+| [`examples/store-usage.js`](examples/store-usage.js) | Pemakaian in-memory store |
 
-- **No `.d.ts` files for `lib/`** — only `WAProto` ships TypeScript definitions. Full autocomplete requires the TypeScript source, which is not included in this build.
-- **Console banner on import** — every time the package is imported, an ASCII art banner and promotional link are printed to stdout. In production or multi-instance setups, this can become noisy.
-- **`optionHash` for per-option image polls** is not implemented — it appears to require further reverse-engineering at the WhatsApp APK level.
-- See the [API Reference](docs/API.md#️-important-notes) for additional technical notes.
+---
 
-## Community Channels
+## 🌐 Community Channels
 
-- **Telegram channel**: [D'synC](https://t.me/dasynch)
-- **Telegram group**: [D'synC Discussion](https://t.me/+Jgm1bf5oeoM2Mjdh)
-- **Credit**: [Van Snowi](https://t.me/TheSatanicMirror)
+- 📢 **Telegram channel**: [About Mulzy](https://t.me/)
+- 💬 **Telegram group**: [CsX Community](https://t.me/+Jgm1bf5oeoM2Mjdh)
+- 🙏 **Telegram creator**: [MulzyX7](https://t.me/mulzyinfinity)
+- 🙏 **Thanks for**: [Van Snowi](https://t.me/TheSatanicMirror)
 
-## Contributing
+---
 
-Issues and pull requests are welcome. Before submitting a PR, please run:
-
-```bash
-npm run lint
-npm test
-```
-
-## Contributors
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Xazepysk">
-        <img src="https://github.com/XazepysK.png" width="80px;" style="border-radius:50%;" alt="Main contributor"/>
-        <br /><sub><b>Xaz zepysK</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/vansnowi">
-        <img src="https://github.com/vansnowi.png" width="80px;" style="border-radius:50%;" alt="Contributor"/>
-        <br /><sub><b>TsM Snøwi</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Xcoursed">
-        <img src="https://github.com/Xcoursed.png" width="80px;" style="border-radius:50%;" alt="Contributor"/>
-        <br /><sub><b>Xcoursed</b></sub>
-      </a>
-    </td>
-  </tr>
-</table>
-
-## License
+## 📄 License
 
 [MIT](LICENSE)
