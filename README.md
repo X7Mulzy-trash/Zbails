@@ -26,11 +26,8 @@
   - [Special Message Types](#special-message-types)
 - [Moderation](#-moderation)
 - [Events](#-events)
-- [Examples](#-examples)
 - [Known Limitations](#-known-limitations)
 - [Community](#-community-channels)
-- [License](#-license)
-
 ---
 
 ## 📦 Requirements
@@ -412,28 +409,11 @@ client.ev.on('creds.update', saveCreds)
 Daftar lengkap event tersedia di `lib/Types/Events.js`.
 
 ---
-
-## 🧪 Examples
-
-Contoh siap-jalan tersedia di [examples/](examples):
-
-| File | Deskripsi |
-|---|---|
-| [`examples/qr-login.js`](examples/qr-login.js) | Login QR dengan auto-reconnect |
-| [`examples/pairing-code.js`](examples/pairing-code.js) | Login pairing code |
-| [`examples/store-usage.js`](examples/store-usage.js) | Pemakaian in-memory store |
-
----
-
 ## 🌐 Community Channels
 
-- 📢 **Telegram channel**: [About Mulzy](https://t.me/)
-- 💬 **Telegram group**: [CsX Community](https://t.me/+Jgm1bf5oeoM2Mjdh)
-- 🙏 **Telegram creator**: [MulzyX7](https://t.me/mulzyinfinity)
+- 📢 **Telegram channel**: [About Mulzy](https://t.me/csxcommunity)
+- 💬 **Information channel**: [CsX Community](https://t.me/coresix6)
+- 🙏 **Telegram creator**: [MulzyX7](https://t.me/xpossed404)
 - 🙏 **Thanks for**: [Van Snowi](https://t.me/TheSatanicMirror)
 
 ---
-
-## 📄 License
-
-[MIT](LICENSE)
